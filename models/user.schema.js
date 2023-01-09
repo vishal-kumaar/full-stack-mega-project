@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema(
 
 // Encrypt password
 userSchema.pre("save", async function (next){
-    if (this.modified("password")){
+    if (this.isModified("password")){
         this.password = await bcrpyt.hash(this.password, 10);
     }
     next();
