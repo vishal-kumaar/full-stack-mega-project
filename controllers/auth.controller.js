@@ -77,5 +77,26 @@ export const login = asyncHandler(async (req, res) => {
         success: true,
         token,
         user
-    })
+    });
+})
+
+/********************************************************
+ * @LOGOUT
+ * @route https://localhost:4000/api/auth/login
+ * @description User logout by clearing user cookies
+ * @parameters none
+ * @return Success message
+*********************************************************/
+
+export const logout = asyncHandler(async (_req, res) => {
+    // res.clearCookies()
+    res.cookies("token", null, {
+        expires: new Date(Date.now()),
+        httpsOnly: true
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out"
+    });
 })
