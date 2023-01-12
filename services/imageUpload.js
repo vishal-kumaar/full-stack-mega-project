@@ -8,12 +8,12 @@ export const s3FileUpload = async({bucketName, key, body, contentType}) => {
         ContentType: contentType
     })
     .promise()
-}
+};
 
-export const deleteFile = async ({bucketName, key}) => {
+export const s3FileDelete = async ({bucketName, key}) => {
     return await s3.deleteObject({
         Bucket: bucketName,
         Key: key
     })
     .promise()
-}
+};
