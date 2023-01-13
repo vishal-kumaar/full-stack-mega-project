@@ -20,7 +20,7 @@ export const createCoupon = asyncHandler(async(req, res) => {
 
     const existingCoupon = await Coupon.findOne({code});
 
-    if (!existingCoupon){
+    if (existingCoupon){
         throw new CustomError("Coupon code is already exist", 400);
     }
 
@@ -33,7 +33,7 @@ export const createCoupon = asyncHandler(async(req, res) => {
     res.status(200).json({
         success: true,
         coupon
-    })
+    });
 });
 
 
@@ -44,6 +44,29 @@ export const createCoupon = asyncHandler(async(req, res) => {
  * @description Only admin and moderator can update the coupon 
  * @return Coupon Object with success message "Coupon Deactivated Successfully" 
  *********************************************************/
+
+export const deactiveCoupon = asyncHandler(async(req, res) => {
+    const {couponId} = req.params;
+
+    if (!couponId){
+        throw new CustomError("Coupon Id is required", 400);
+    }
+
+    const coupon = await Coupon.findOne({couponId});
+
+    if (!coupon){
+        throw new CustomError("Coupon is not found", 400);
+    }
+
+    coupon.active = false;
+
+    await coupon.save({validateBeforeSave: true});
+
+    res.status(200).json({
+        success: true,
+        coupon
+    });
+});
 
 /********************************************************
  * @DELETE_COUPON
