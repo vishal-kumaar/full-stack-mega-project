@@ -202,7 +202,44 @@ export const resetPassword = asyncHandler(async (req, res) => {
     })
 });
 
-// TODO: Create a controller for change password
+/********************************************************
+ * @CHANGE_PASSWORD
+ * @route https://localhost:4000/api/auth/password/changePassword/:id
+ * @description User will able to change the previous password
+ * @parameters Old password and New password
+ * @return User object
+*********************************************************/
+
+export const changePassword = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+    const {oldPassword, newPassword} = req.body;
+
+    if (!id){
+        throw new CustomError("Id is required", 400);
+    }
+
+    if (!oldPassword || !newPassword){
+        throw new CustomError("Old password and new password are required", 400);
+    }
+
+    const user = await User.findOne({id});
+
+    if (!user){
+        throw new CustomError("User not found", 400);
+    }
+
+    if (!user.comparePassword(oldPassword)){
+        throw new CustomError("Entered old password is wrong", 400);
+    }
+
+    user.password = newPassword;
+    await user.save({validateBeforeSave: true});
+    
+    res.status(200).json({
+        success: true,
+        user
+    })
+});
 
 /********************************************************
  * @GET_PROFILE
