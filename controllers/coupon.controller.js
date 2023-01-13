@@ -76,6 +76,25 @@ export const deactiveCoupon = asyncHandler(async(req, res) => {
  * @return Coupon Object with success message "Coupon Deleted Successfully" 
  *********************************************************/
 
+export const deleteCoupon = asyncHandler(async(req, res) => {
+    const {couponId} = req.params;
+    
+    if (!couponId){
+        throw new CustomError("Coupon id is required", 400);
+    }
+
+    const coupon = await Coupon.findByIdAndDelete(couponId);
+
+    if (!coupon){
+        throw new CustomError("Coupon id is invalid", 400);
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Coupon deleted successfully"
+    });
+});
+
 /********************************************************
  * @GET_ALL_COUPONS
  * @route https://localhost:4000/api/coupon/
