@@ -102,3 +102,16 @@ export const deleteCoupon = asyncHandler(async(req, res) => {
  * @description Only admin and moderator can delete the coupon 
  * @return All Coupons Object
  *********************************************************/
+
+export const getAllCoupons = asyncHandler(async(req, res) => {
+    const coupons = await Coupon.find({});
+
+    if (!coupons){
+        throw new CustomError("No coupon found", 400);
+    }
+
+    res.status(200).json({
+        success: true,
+        coupons
+    });
+});
